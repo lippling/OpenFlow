@@ -37,6 +37,7 @@
 	NSMutableDictionary				*onscreenCovers;
 	NSMutableDictionary				*coverImages;
 	NSMutableDictionary				*coverImageHeights;
+	NSMutableDictionary				*coverTexts;
 	UIImage							*defaultImage;
 	CGFloat							defaultImageHeight;
 
@@ -66,7 +67,7 @@
 
 - (void)setSelectedCover:(int)newSelectedCover;
 - (void)centerOnSelectedCover:(BOOL)animated;
-- (void)setImage:(UIImage *)image forIndex:(int)index;
+- (void)setImage:(UIImage *)image forIndex:(int)index withText:(NSString *)text;
 
 @end
 

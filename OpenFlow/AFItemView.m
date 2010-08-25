@@ -41,16 +41,28 @@
 		imageView = [[UIImageView alloc] initWithFrame:frame];
 		imageView.opaque = YES;
 		[self addSubview:imageView];
+
+		label = [[UILabel alloc] init];
+		label.textColor = [UIColor whiteColor];
+		label.opaque = NO;
+		label.backgroundColor = [UIColor clearColor];
+		label.textAlignment = UITextAlignmentCenter;
+		label.font = [UIFont boldSystemFontOfSize:13.0f];
+		label.shadowColor = [UIColor blackColor];
+		label.numberOfLines = 2;
+		[self addSubview:label];
 	}
 	
 	return self;
 }
 
-- (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction {
+- (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction text:(NSString *)text {
 	[imageView setImage:newImage];
 	verticalPosition = imageHeight * reflectionFraction / 2;
 	originalImageHeight = imageHeight;
+	label.text = text;
 	self.frame = CGRectMake(0, 0, newImage.size.width, newImage.size.height);
+	label.frame = CGRectMake(0.0f, originalImageHeight+10.0f, newImage.size.width, 40.0f);
 }
 
 - (void)setNumber:(int)newNumber {
@@ -82,6 +94,7 @@
 
 - (void)dealloc {
 	[imageView release];
+	[label release];
 	
 	[super dealloc];
 }
