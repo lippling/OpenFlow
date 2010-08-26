@@ -313,7 +313,13 @@ const static CGFloat kReflectionFraction = 0.85;
 		CALayer *targetLayer = (CALayer *)[scrollView.layer hitTest:targetPoint];
 		AFItemView *targetCover = [self findCoverOnscreen:targetLayer];
 		if (targetCover && (targetCover.number != selectedCoverView.number))
+		{
 			[self setSelectedCover:targetCover.number];
+		}
+		else
+		{
+			[viewDelegate openFlowView:self tapOnCoverAtIndex:targetCover.number];
+		}
 	}
 	[self centerOnSelectedCover:YES];
 	
