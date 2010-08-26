@@ -56,13 +56,16 @@
 	return self;
 }
 
-- (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction text:(NSString *)text {
+- (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction {
 	[imageView setImage:newImage];
 	verticalPosition = imageHeight * reflectionFraction / 2;
 	originalImageHeight = imageHeight;
-	label.text = text;
 	self.frame = CGRectMake(0, 0, newImage.size.width, newImage.size.height);
-	label.frame = CGRectMake(0.0f, originalImageHeight+10.0f, newImage.size.width, 40.0f);
+}
+
+- (void)setText:(NSString *)text {
+	label.text = text;
+	label.frame = CGRectMake(0.0f, originalImageHeight+10.0f, imageView.bounds.size.width, 40.0f);
 }
 
 - (void)setNumber:(int)newNumber {

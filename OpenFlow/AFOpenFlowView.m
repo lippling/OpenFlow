@@ -99,10 +99,13 @@ const static CGFloat kReflectionFraction = 0.85;
 	NSString *coverText = [coverTexts objectForKey:coverNumber];
 	if (coverImage) {
 		NSNumber *coverImageHeightNumber = (NSNumber *)[coverImageHeights objectForKey:coverNumber];
-		if (coverImageHeightNumber)
-			[aCover setImage:coverImage originalImageHeight:[coverImageHeightNumber floatValue] reflectionFraction:kReflectionFraction text:coverText];
+		if (coverImageHeightNumber) {
+			[aCover setImage:coverImage originalImageHeight:[coverImageHeightNumber floatValue] reflectionFraction:kReflectionFraction];
+			[aCover setText:coverText];
+		}
 	} else {
-		[aCover setImage:defaultImage originalImageHeight:defaultImageHeight reflectionFraction:kReflectionFraction text:coverText];
+		[aCover setImage:defaultImage originalImageHeight:defaultImageHeight reflectionFraction:kReflectionFraction];
+		[aCover setText:coverText];
 		[self.dataSource openFlowView:self requestImageForIndex:aCover.number];
 	}
 }
@@ -241,20 +244,24 @@ const static CGFloat kReflectionFraction = 0.85;
 	defaultImage = [[newDefaultImage addImageReflection:kReflectionFraction] retain];
 }
 
-- (void)setImage:(UIImage *)image forIndex:(int)index withText:(NSString *)text {
+- (void)setImage:(UIImage *)image forIndex:(int)index {
 	// Create a reflection for this image.
 	UIImage *imageWithReflection = [image addImageReflection:kReflectionFraction];
 	NSNumber *coverNumber = [NSNumber numberWithInt:index];
 	[coverImages setObject:imageWithReflection forKey:coverNumber];
 	[coverImageHeights setObject:[NSNumber numberWithFloat:image.size.height] forKey:coverNumber];
-	[coverTexts setObject:text forKey:coverNumber];
 	
 	// If this cover is onscreen, set its image and call layoutCover.
 	AFItemView *aCover = (AFItemView *)[onscreenCovers objectForKey:[NSNumber numberWithInt:index]];
 	if (aCover) {
-		[aCover setImage:imageWithReflection originalImageHeight:image.size.height reflectionFraction:kReflectionFraction text:text];
+		[aCover setImage:imageWithReflection originalImageHeight:image.size.height reflectionFraction:kReflectionFraction];
 		[self layoutCover:aCover selectedCover:selectedCoverView.number animated:NO];
 	}
+}
+
+- (void)setText:(NSString *)text forIndex:(int)index {
+	NSNumber *coverNumber = [NSNumber numberWithInt:index];
+	[coverTexts setObject:text forKey:coverNumber];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
