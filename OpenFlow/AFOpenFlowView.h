@@ -26,6 +26,10 @@
 #import "AFItemView.h"
 #import <QuartzCore/QuartzCore.h>
 
+typedef enum {
+	OpenFlowReflectionTypeReflection,
+	OpenFlowReflectionTypeGradient
+} OpenFlowViewReflectionType;
 
 @protocol AFOpenFlowViewDataSource;
 @protocol AFOpenFlowViewDelegate;
@@ -64,6 +68,7 @@
 @property (nonatomic, assign) id <AFOpenFlowViewDelegate> viewDelegate;
 @property (nonatomic, retain) UIImage *defaultImage;
 @property int numberOfImages;
+@property (nonatomic) OpenFlowViewReflectionType reflectionType;
 
 - (void)setSelectedCover:(int)newSelectedCover;
 - (void)centerOnSelectedCover:(BOOL)animated;

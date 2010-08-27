@@ -27,5 +27,6 @@
 @interface UIImage (AFUIImageReflection)
 
 - (UIImage *)addImageReflection:(CGFloat)reflectionFraction;
+- (UIImage *)addImageGradient:(CGFloat)reflectionFraction;
 
 @end

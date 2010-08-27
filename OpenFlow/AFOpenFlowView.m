@@ -36,6 +36,7 @@
 - (void)layoutCovers:(int)selected fromCover:(int)lowerBound toCover:(int)upperBound;
 - (void)layoutCover:(AFItemView *)aCover selectedCover:(int)selectedIndex animated:(Boolean)animated;
 - (AFItemView *)findCoverOnscreen:(CALayer *)targetLayer;
+- (UIImage *)addReflectionOrGradientToImage:(UIImage *)image;
 
 @end
 
@@ -174,11 +175,19 @@ const static CGFloat kReflectionFraction = 0.85;
 	
 	return aCover;
 }
+
+- (UIImage *)addReflectionOrGradientToImage:(UIImage *)image {
+	if (self.reflectionType == OpenFlowReflectionTypeReflection)
+		return [image addImageReflection:kReflectionFraction];
+	else if (self.reflectionType == OpenFlowReflectionTypeGradient)
+		return [image addImageGradient:kReflectionFraction];
+	return image;
+}
 @end
 
 
 @implementation AFOpenFlowView
-@synthesize dataSource, viewDelegate, numberOfImages, defaultImage;
+@synthesize dataSource, viewDelegate, numberOfImages, defaultImage, reflectionType;
 
 #define COVER_BUFFER 6
 
@@ -241,12 +250,11 @@ const static CGFloat kReflectionFraction = 0.85;
 - (void)setDefaultImage:(UIImage *)newDefaultImage {
 	[defaultImage release];
 	defaultImageHeight = newDefaultImage.size.height;
-	defaultImage = [[newDefaultImage addImageReflection:kReflectionFraction] retain];
+	defaultImage = [[self addReflectionOrGradientToImage:newDefaultImage] retain];
 }
 
 - (void)setImage:(UIImage *)image forIndex:(int)index {
-	// Create a reflection for this image.
-	UIImage *imageWithReflection = [image addImageReflection:kReflectionFraction];
+	UIImage *imageWithReflection = [self addReflectionOrGradientToImage:image];
 	NSNumber *coverNumber = [NSNumber numberWithInt:index];
 	[coverImages setObject:imageWithReflection forKey:coverNumber];
 	[coverImageHeights setObject:[NSNumber numberWithFloat:image.size.height] forKey:coverNumber];

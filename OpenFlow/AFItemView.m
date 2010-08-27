@@ -65,7 +65,7 @@
 
 - (void)setText:(NSString *)text {
 	label.text = text;
-	label.frame = CGRectMake(0.0f, originalImageHeight+10.0f, imageView.bounds.size.width, 40.0f);
+	label.frame = CGRectMake(0.0f, originalImageHeight, imageView.bounds.size.width, 40.0f);
 }
 
 - (void)setNumber:(int)newNumber {

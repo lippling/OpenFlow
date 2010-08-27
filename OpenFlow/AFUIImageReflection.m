@@ -87,4 +87,48 @@
 	return result;
 }
 
+- (UIImage *)addImageGradient:(CGFloat)reflectionFraction {
+	int reflectionHeight = self.size.height * reflectionFraction;
+	
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+	CGContextRef gradientBitmapContext = CGBitmapContextCreate(nil, self.size.width, reflectionHeight, 8, 0, colorSpace, kCGImageAlphaNone);
+	
+	CGFloat components[] = {1.0f, 1.0f, 0.0f, 1.0f};
+	CGFloat locations[] = {0.0f, 0.3f};
+	CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 2);
+	CGContextDrawLinearGradient(gradientBitmapContext, gradient, CGPointZero, CGPointMake(0.0f, reflectionHeight), kCGGradientDrawsAfterEndLocation);
+	CGGradientRelease(gradient);
+	
+	CGImageRef gradientMaskImage = CGBitmapContextCreateImage(gradientBitmapContext);
+	
+	CGContextRelease(gradientBitmapContext);
+	
+	CGContextRef blackContext = CGBitmapContextCreate(nil, self.size.width, reflectionHeight, 8, 0, colorSpace, kCGImageAlphaNone);
+	CGColorSpaceRelease(colorSpace);
+	
+	CGContextSetGrayFillColor(blackContext, 1.0f, 0.6f);
+	CGContextFillRect(blackContext, CGRectMake(0.0f, 0.0f, self.size.width, reflectionHeight));
+	
+	CGImageRef blackImage = CGBitmapContextCreateImage(blackContext);
+	
+	CGContextRelease(blackContext);
+	
+	CGImageRef reflectionImage = CGImageCreateWithMask(blackImage, gradientMaskImage);
+	CGImageRelease(gradientMaskImage);
+	CGImageRelease(blackImage);
+	
+	CGSize size = CGSizeMake(self.size.width, self.size.height + reflectionHeight);
+	UIGraphicsBeginImageContext(size);
+	
+	[self drawAtPoint:CGPointZero];	
+	CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, self.size.height+5, self.size.width, reflectionHeight), reflectionImage);
+	CGImageRelease(reflectionImage);
+	
+	UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
+	
+	UIGraphicsEndImageContext();
+	
+	return result;
+}
+
 @end
